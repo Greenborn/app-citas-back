@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 06-04-2021 a las 23:28:25
+-- Tiempo de generación: 21-04-2021 a las 20:37:21
 -- Versión del servidor: 10.4.13-MariaDB
 -- Versión de PHP: 7.4.7
 
@@ -24,14 +24,24 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `chat-room`
+-- Estructura de tabla para la tabla `chat_room`
 --
 
-CREATE TABLE `chat-room` (
+CREATE TABLE `chat_room` (
   `id` int(11) NOT NULL,
-  `chat_id` int(11) NOT NULL,
-  `user_sender` int(11) DEFAULT NULL,
-  `user_receiver` int(11) DEFAULT NULL
+  `user_sender_id` int(11) DEFAULT NULL,
+  `user_receiver_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `gender`
+--
+
+CREATE TABLE `gender` (
+  `id` int(11) NOT NULL,
+  `type` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -42,9 +52,8 @@ CREATE TABLE `chat-room` (
 
 CREATE TABLE `matches` (
   `id` int(11) NOT NULL,
-  `id_match` int(11) NOT NULL,
-  `matcher` int(11) DEFAULT NULL,
-  `matched` int(11) DEFAULT NULL
+  `user_matcher_id` int(11) DEFAULT NULL,
+  `user_matched_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -54,11 +63,45 @@ CREATE TABLE `matches` (
 --
 
 CREATE TABLE `message` (
-  `id_message` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `chat_id` int(11) NOT NULL,
-  `user_sender` int(11) DEFAULT NULL,
-  `user_reciver` int(11) DEFAULT NULL
+  `user_sender_id` int(11) DEFAULT NULL,
+  `message` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `profile`
+--
+
+CREATE TABLE `profile` (
+  `id` int(11) NOT NULL,
+  `birth_date` varchar(15) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `image_src` varchar(500) DEFAULT NULL,
+  `gender_id` int(11) DEFAULT NULL,
+  `gender_preference_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `role`
+--
+
+CREATE TABLE `role` (
+  `id` int(11) NOT NULL,
+  `type` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `role`
+--
+
+INSERT INTO `role` (`id`, `type`) VALUES
+(1, 'administrator');
 
 -- --------------------------------------------------------
 
@@ -67,111 +110,162 @@ CREATE TABLE `message` (
 --
 
 CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `username` varchar(45) DEFAULT NULL,
-  `user_email` varchar(45) DEFAULT NULL,
-  `user_pass` int(11) NOT NULL,
-  `user_sex` int(45) DEFAULT NULL,
-  `i_find` int(45) DEFAULT NULL,
-  `birth_date` date DEFAULT NULL,
-  `user_description` varchar(225) DEFAULT NULL,
-  `user_role` int(45) DEFAULT NULL,
-  `profile_img_src` varchar(225) DEFAULT NULL
+  `password_hash` varchar(255) DEFAULT NULL,
+  `password_reset_token` varchar(255) DEFAULT NULL,
+  `access_token` varchar(128) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` varchar(45) DEFAULT NULL,
+  `updated_at` varchar(45) DEFAULT NULL,
+  `role_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `password_hash`, `password_reset_token`, `access_token`, `status`, `created_at`, `updated_at`, `role_id`) VALUES
+(1, 'admin', '$2y$13$HeoJ/HeyhNLYBY0z6SWNzOovbzHE5krKJ8K7AWNc.KjB/Bjcf6BPG', NULL, '$2y$13$Tr6i.CEbjh7LoQDbFmBYGOLolsriXJfCeYSSQ9gc9QkRFsr842hc6', 1, NULL, NULL, 1);
 
 --
 -- Índices para tablas volcadas
 --
 
 --
--- Indices de la tabla `chat-room`
+-- Indices de la tabla `chat_room`
 --
-ALTER TABLE `chat-room`
-  ADD PRIMARY KEY (`chat_id`),
-  ADD KEY `user_sender` (`user_sender`,`user_receiver`),
-  ADD KEY `user_receiver` (`user_receiver`);
+ALTER TABLE `chat_room`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_chat_room_user_sender_id` (`user_sender_id`),
+  ADD KEY `fk_chat_room_user_reciver_id` (`user_receiver_id`);
+
+--
+-- Indices de la tabla `gender`
+--
+ALTER TABLE `gender`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `matches`
 --
 ALTER TABLE `matches`
-  ADD PRIMARY KEY (`id_match`),
-  ADD UNIQUE KEY `matcher` (`matcher`,`matched`),
-  ADD KEY `matched` (`matched`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_matches_user_matcher_id` (`user_matcher_id`),
+  ADD KEY `fk_matches_user_matched_id` (`user_matched_id`);
 
 --
 -- Indices de la tabla `message`
 --
 ALTER TABLE `message`
-  ADD PRIMARY KEY (`id_message`),
-  ADD UNIQUE KEY `chat_id` (`chat_id`),
-  ADD UNIQUE KEY `user_sender` (`user_sender`,`user_reciver`),
-  ADD KEY `user_reciver` (`user_reciver`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_message_user_sender_id` (`user_sender_id`),
+  ADD KEY `fk_message_chat_id` (`chat_id`);
+
+--
+-- Indices de la tabla `profile`
+--
+ALTER TABLE `profile`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_profile_gender_preference_id` (`gender_id`),
+  ADD KEY `fk_profile_gender_prefernce_id` (`gender_preference_id`);
+
+--
+-- Indices de la tabla `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_user_role_id` (`role_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT de la tabla `chat-room`
+-- AUTO_INCREMENT de la tabla `chat_room`
 --
-ALTER TABLE `chat-room`
-  MODIFY `chat_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `chat_room`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `gender`
+--
+ALTER TABLE `gender`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `matches`
 --
 ALTER TABLE `matches`
-  MODIFY `id_match` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `message`
 --
 ALTER TABLE `message`
-  MODIFY `id_message` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `profile`
+--
+ALTER TABLE `profile`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `role`
+--
+ALTER TABLE `role`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
 --
 
 --
--- Filtros para la tabla `chat-room`
+-- Filtros para la tabla `chat_room`
 --
-ALTER TABLE `chat-room`
-  ADD CONSTRAINT `chat-room_ibfk_1` FOREIGN KEY (`user_receiver`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `chat-room_ibfk_2` FOREIGN KEY (`chat_id`) REFERENCES `message` (`chat_id`);
+ALTER TABLE `chat_room`
+  ADD CONSTRAINT `fk_chat_room_user_reciver_id` FOREIGN KEY (`user_receiver_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `fk_chat_room_user_sender_id` FOREIGN KEY (`user_sender_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `matches`
 --
 ALTER TABLE `matches`
-  ADD CONSTRAINT `matches_ibfk_1` FOREIGN KEY (`matcher`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `matches_ibfk_2` FOREIGN KEY (`matched`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `fk_matches_user_matched_id` FOREIGN KEY (`user_matched_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_matches_user_matcher_id` FOREIGN KEY (`user_matcher_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `message`
 --
 ALTER TABLE `message`
-  ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`user_sender`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `message_ibfk_2` FOREIGN KEY (`user_reciver`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `fk_message_chat_id` FOREIGN KEY (`chat_id`) REFERENCES `chat_room` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_message_user_sender_id` FOREIGN KEY (`user_sender_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `profile`
+--
+ALTER TABLE `profile`
+  ADD CONSTRAINT `fk_profile_gender_id` FOREIGN KEY (`gender_id`) REFERENCES `gender` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_profile_gender_prefernce_id` FOREIGN KEY (`gender_preference_id`) REFERENCES `gender` (`id`);
 
 --
 -- Filtros para la tabla `user`
 --
 ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `chat-room` (`user_sender`);
+  ADD CONSTRAINT `fk_user_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
