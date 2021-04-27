@@ -11,12 +11,14 @@ use Yii;
  * @property string|null $birth_date
  * @property string|null $description
  * @property string|null $email
- * @property string|null $image_src
  * @property int|null $gender_id
  * @property int $gender_preference_id
+ * @property int|null $default_profile_image_id
  *
+ * @property ProfileImage $defaultProfileImage
  * @property Gender $gender
  * @property Gender $genderPreference
+ * @property ProfileImage[] $profileImages
  */
 class Profile extends \yii\db\ActiveRecord
 {
@@ -34,11 +36,11 @@ class Profile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['gender_id', 'gender_preference_id'], 'integer'],
+            [['gender_id', 'gender_preference_id', 'default_profile_image_id'], 'integer'],
             [['gender_preference_id'], 'required'],
             [['birth_date'], 'string', 'max' => 15],
             [['description', 'email'], 'string', 'max' => 255],
-            [['image_src'], 'string', 'max' => 500],
+            [['default_profile_image_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProfileImage::className(), 'targetAttribute' => ['default_profile_image_id' => 'id']],
             [['gender_id'], 'exist', 'skipOnError' => true, 'targetClass' => Gender::className(), 'targetAttribute' => ['gender_id' => 'id']],
             [['gender_preference_id'], 'exist', 'skipOnError' => true, 'targetClass' => Gender::className(), 'targetAttribute' => ['gender_preference_id' => 'id']],
         ];
@@ -54,10 +56,20 @@ class Profile extends \yii\db\ActiveRecord
             'birth_date' => 'Birth Date',
             'description' => 'Description',
             'email' => 'Email',
-            'image_src' => 'Image Src',
             'gender_id' => 'Gender ID',
             'gender_preference_id' => 'Gender Preference ID',
+            'default_profile_image_id' => 'Default Profile Image ID',
         ];
+    }
+
+    /**
+     * Gets query for [[DefaultProfileImage]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDefaultProfileImage()
+    {
+        return $this->hasOne(ProfileImage::className(), ['id' => 'default_profile_image_id'])->inverseOf('profiles');
     }
 
     /**
@@ -78,5 +90,15 @@ class Profile extends \yii\db\ActiveRecord
     public function getGenderPreference()
     {
         return $this->hasOne(Gender::className(), ['id' => 'gender_preference_id'])->inverseOf('profiles0');
+    }
+
+    /**
+     * Gets query for [[ProfileImages]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProfileImages()
+    {
+        return $this->hasMany(ProfileImage::className(), ['profile_id' => 'id'])->inverseOf('profile');
     }
 }

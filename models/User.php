@@ -50,12 +50,13 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['status', 'role_id'], 'integer'],
-            [['role_id'], 'required'],
+            [['state_id', 'role_id'], 'required'],
+            [['state_id', 'online', 'role_id'], 'integer'],
             [['username', 'created_at', 'updated_at'], 'string', 'max' => 45],
             [['password_hash', 'password_reset_token'], 'string', 'max' => 255],
             [['access_token'], 'string', 'max' => 128],
             [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role_id' => 'id']],
+            [['state_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['state_id' => 'id']],
         ];
     }
 
@@ -70,9 +71,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
             'access_token' => 'Access Token',
-            'status' => 'Status',
+            'state_id' => 'State ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'online' => 'Online',
             'role_id' => 'Role ID',
         ];
     }
@@ -137,6 +139,15 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->hasOne(Role::className(), ['id' => 'role_id'])->inverseOf('users');
     }
 
+    /**
+     * Gets query for [[State]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getState()
+    {
+        return $this->hasOne(Role::className(), ['id' => 'state_id'])->inverseOf('users0');
+    }
 
     public function fields() {
         $fields = parent::fields();
