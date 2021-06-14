@@ -56,7 +56,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['password_hash', 'password_reset_token'], 'string', 'max' => 255],
             [['access_token'], 'string', 'max' => 128],
             [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role_id' => 'id']],
-            [['state_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['state_id' => 'id']],
         ];
     }
 
@@ -155,7 +154,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         // quita los campos con información sensible
         unset( $fields['password_hash'],
                $fields['access_token'],
-               $fields['role_id'],
              );
 
         return $fields;
