@@ -52,12 +52,9 @@ class UserAction extends CreateAction {
             $profile->gender_id = $gender_id;
             $profile->gender_preference_id = $gender_preference_id;
             $profile->default_profile_image_id = $default_profile_image_id;
-            
-            $transaction1 = Profile::getDb()->beginTransaction();
 
             if($profile->save()){
                 $transaction->commit();
-                $transaction1->commit();
                 $response->data = [
                     'status' => true,
                     'username' => $user->username,
@@ -68,7 +65,6 @@ class UserAction extends CreateAction {
             };
         } else{
           $transaction->rollBack();
-          $transaction1->rollBack();
           $response->data = [
             'status' => false,
             'message' => 'User not created! There is some error!'

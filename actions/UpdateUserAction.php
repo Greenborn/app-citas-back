@@ -43,28 +43,23 @@ class UpdateUserAction extends UpdateAction {
               $user->password_hash = Yii::$app->getSecurity()->generatePasswordHash($password);
 
             $transaction = User::getDb()->beginTransaction();
-            $transaction1 = Profile::getDb()->beginTransaction();
 
             if ($user->save() && $profile->save()){
               $transaction->commit();
-              $transaction1->commit();
               $response->data = [
                 'id' => $user->id,
                 'profile' => $profile->id,
               ];
             } else{
               $transaction->rollBack();
-              $transaction1->rollBack();
               throw new \Exception($user->getErrors(), 1);
             }
           } else{
             $transaction->rollBack();
-            $transaction1->rollBack();
             throw new \Exception('El usuario no existe', 1);
           }
       } catch (\Exception $e) {
         $transaction->rollBack();
-        $transaction1->rollBack();
         $response->data = [
           'status' => false,
           'message' => $e->getMessage()
