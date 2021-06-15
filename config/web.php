@@ -61,7 +61,6 @@ $config = [
               ],
               [ 'class' => 'yii\rest\UrlRule',
                 'controller' => 'profile-image',
-                'pluralize' => false,
               ],
               [ 'class' => 'yii\rest\UrlRule',
                 'controller' => 'matches',
