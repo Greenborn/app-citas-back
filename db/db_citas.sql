@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost
--- Tiempo de generación: 21-04-2021 a las 20:37:21
--- Versión del servidor: 10.4.13-MariaDB
--- Versión de PHP: 7.4.7
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 14-06-2021 a las 22:44:09
+-- Versión del servidor: 10.4.14-MariaDB
+-- Versión de PHP: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -44,6 +44,15 @@ CREATE TABLE `gender` (
   `type` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `gender`
+--
+
+INSERT INTO `gender` (`id`, `type`) VALUES
+(1, 'Hombre'),
+(2, 'Mujer'),
+(3, 'No binario');
+
 -- --------------------------------------------------------
 
 --
@@ -80,9 +89,28 @@ CREATE TABLE `profile` (
   `birth_date` varchar(15) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `image_src` varchar(500) DEFAULT NULL,
+  `default_profile_image_id` varchar(500) DEFAULT NULL,
   `gender_id` int(11) DEFAULT NULL,
   `gender_preference_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `profile`
+--
+
+INSERT INTO `profile` (`id`, `birth_date`, `description`, `email`, `default_profile_image_id`, `gender_id`, `gender_preference_id`) VALUES
+(1, NULL, NULL, NULL, NULL, NULL, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `profile_image`
+--
+
+CREATE TABLE `profile_image` (
+  `id` int(11) NOT NULL,
+  `path` int(11) NOT NULL,
+  `profile_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -101,7 +129,8 @@ CREATE TABLE `role` (
 --
 
 INSERT INTO `role` (`id`, `type`) VALUES
-(1, 'administrator');
+(1, 'administrator'),
+(2, 'Usuario Final');
 
 -- --------------------------------------------------------
 
@@ -115,18 +144,19 @@ CREATE TABLE `user` (
   `password_hash` varchar(255) DEFAULT NULL,
   `password_reset_token` varchar(255) DEFAULT NULL,
   `access_token` varchar(128) DEFAULT NULL,
-  `status` int(11) DEFAULT NULL,
+  `state_id` int(11) DEFAULT NULL,
   `created_at` varchar(45) DEFAULT NULL,
   `updated_at` varchar(45) DEFAULT NULL,
-  `role_id` int(11) NOT NULL
+  `role_id` int(11) NOT NULL,
+  `online` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `password_hash`, `password_reset_token`, `access_token`, `status`, `created_at`, `updated_at`, `role_id`) VALUES
-(1, 'admin', '$2y$13$HeoJ/HeyhNLYBY0z6SWNzOovbzHE5krKJ8K7AWNc.KjB/Bjcf6BPG', NULL, '$2y$13$Tr6i.CEbjh7LoQDbFmBYGOLolsriXJfCeYSSQ9gc9QkRFsr842hc6', 1, NULL, NULL, 1);
+INSERT INTO `user` (`id`, `username`, `password_hash`, `password_reset_token`, `access_token`, `state_id`, `created_at`, `updated_at`, `role_id`, `online`) VALUES
+(1, 'admin', '$2y$13$HeoJ/HeyhNLYBY0z6SWNzOovbzHE5krKJ8K7AWNc.KjB/Bjcf6BPG', NULL, '$2y$13$Tr6i.CEbjh7LoQDbFmBYGOLolsriXJfCeYSSQ9gc9QkRFsr842hc6', 1, NULL, NULL, 1, 0);
 
 --
 -- Índices para tablas volcadas
@@ -171,6 +201,13 @@ ALTER TABLE `profile`
   ADD KEY `fk_profile_gender_prefernce_id` (`gender_preference_id`);
 
 --
+-- Indices de la tabla `profile_image`
+--
+ALTER TABLE `profile_image`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `profile_id` (`profile_id`);
+
+--
 -- Indices de la tabla `role`
 --
 ALTER TABLE `role`
@@ -197,7 +234,7 @@ ALTER TABLE `chat_room`
 -- AUTO_INCREMENT de la tabla `gender`
 --
 ALTER TABLE `gender`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `matches`
@@ -212,16 +249,16 @@ ALTER TABLE `message`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `profile`
+-- AUTO_INCREMENT de la tabla `profile_image`
 --
-ALTER TABLE `profile`
+ALTER TABLE `profile_image`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `role`
 --
 ALTER TABLE `role`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
@@ -260,6 +297,13 @@ ALTER TABLE `message`
 ALTER TABLE `profile`
   ADD CONSTRAINT `fk_profile_gender_id` FOREIGN KEY (`gender_id`) REFERENCES `gender` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_profile_gender_prefernce_id` FOREIGN KEY (`gender_preference_id`) REFERENCES `gender` (`id`);
+
+--
+-- Filtros para la tabla `profile_image`
+--
+ALTER TABLE `profile_image`
+  ADD CONSTRAINT `profile_image_ibfk_1` FOREIGN KEY (`profile_id`) REFERENCES `profile` (`id`),
+  ADD CONSTRAINT `profile_image_ibfk_2` FOREIGN KEY (`id`) REFERENCES `user` (`id`);
 
 --
 -- Filtros para la tabla `user`
