@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 14-06-2021 a las 22:44:09
--- Versión del servidor: 10.4.14-MariaDB
--- Versión de PHP: 7.4.10
+-- Servidor: localhost
+-- Tiempo de generación: 16-06-2021 a las 20:22:27
+-- Versión del servidor: 10.4.19-MariaDB
+-- Versión de PHP: 7.4.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -109,7 +109,7 @@ INSERT INTO `profile` (`id`, `birth_date`, `description`, `email`, `default_prof
 
 CREATE TABLE `profile_image` (
   `id` int(11) NOT NULL,
-  `path` int(11) NOT NULL,
+  `path` varchar(400) NOT NULL,
   `profile_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -148,7 +148,7 @@ CREATE TABLE `user` (
   `created_at` varchar(45) DEFAULT NULL,
   `updated_at` varchar(45) DEFAULT NULL,
   `role_id` int(11) NOT NULL,
-  `online` tinyint(1) NOT NULL
+  `online` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -315,7 +315,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
---------------------
---- DATA INICIAL ---
-INSERT INTO `role` (`id`, `type`) VALUES ('2', 'Usuario');
