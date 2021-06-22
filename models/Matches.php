@@ -67,4 +67,10 @@ class Matches extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_matcher_id'])->inverseOf('matches0');
     }
+
+    public function extraFields() {
+        return [ 'userMatched',
+                 'userMatcher'
+               ];
+    }
 }
