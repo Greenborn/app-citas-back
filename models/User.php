@@ -16,6 +16,7 @@ use Yii;
  * @property string|null $created_at
  * @property string|null $updated_at
  * @property int $role_id
+ * @property int $profile_id
  *
  * @property Chat-room[] $chat-rooms
  * @property Chat-room[] $chat-rooms0
@@ -23,6 +24,7 @@ use Yii;
  * @property Matches[] $matches0
  * @property Message[] $messages
  * @property Role $role
+ * @property Profile $profile
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -56,6 +58,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['password_hash', 'password_reset_token'], 'string', 'max' => 255],
             [['access_token'], 'string', 'max' => 128],
             [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role_id' => 'id']],
+            [['profile_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::className(), 'targetAttribute' => ['profile_id' => 'id']],
         ];
     }
 
@@ -75,6 +78,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'updated_at' => 'Updated At',
             'online' => 'Online',
             'role_id' => 'Role ID',
+            'profile_id' => 'Profile ID',
         ];
     }
 
@@ -148,6 +152,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->hasOne(Role::className(), ['id' => 'state_id'])->inverseOf('users0');
     }
 
+    /**
+     * Gets query for [[Profile]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProfile()
+    {
+        return $this->hasOne(Profile::className(), ['id' => 'profile_id'])->inverseOf('userProfile');
+    }
+
     public function fields() {
         $fields = parent::fields();
 
@@ -158,6 +172,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
         return $fields;
     }
+
+    public function extraFields() {
+        return [ 'userProfile'];
+    }
+
 
     public static function findIdentity($id)  {
         return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
