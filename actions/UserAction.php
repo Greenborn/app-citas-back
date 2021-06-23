@@ -65,6 +65,12 @@ class UserAction extends CreateAction {
                   'profile' => $profile->id,
                   'message' => 'User created!'
               ];
+            }else{
+              $transaction->rollBack();
+              $response->data = [
+                'status' => false,
+                'message' => 'User not created! There is some error!'
+              ];
             }
         } else{
           $transaction->rollBack();
