@@ -35,34 +35,37 @@ class UserAction extends CreateAction {
         $user->state_id = 1;
         $user->role_id = $role_id;
 
+        $profile = new Profile();
+        $profile->id= 0;
+        $birth_date = isset($params['birth_date']) ? $params['birth_date'] : null;
+        $description = isset($params['description']) ? $params['description'] : null;
+        $email = isset($params['email']) ? $params['email'] : null;
+        $gender_id = isset($params['gender_id']) ? $params['gender_id'] : null;
+        $gender_preference_id = isset($params['gender_preference_id']) ? $params['gender_preference_id'] : null;
+        $default_profile_image_id = isset($params['default_profile_image_id']) ? $params['default_profile_image_id'] : null;
+        $profile->birth_date = $birth_date;
+        $profile->description = $description;
+        $profile->email = $email;
+        $profile->gender_id = $gender_id;
+        $profile->gender_preference_id = $gender_preference_id;
+        $profile->default_profile_image_id = $default_profile_image_id;
+
+        $user->profile_id = $profile->id;
+
         $transaction = User::getDb()->beginTransaction();
 
-        if ($user->save()){
-            $profile = new Profile();
-            $profile->id= $user->id;
-            $birth_date = isset($params['birth_date']) ? $params['birth_date'] : null;
-            $description = isset($params['description']) ? $params['description'] : null;
-            $email = isset($params['email']) ? $params['email'] : null;
-            $gender_id = isset($params['gender_id']) ? $params['gender_id'] : null;
-            $gender_preference_id = isset($params['gender_preference_id']) ? $params['gender_preference_id'] : null;
-            $default_profile_image_id = isset($params['default_profile_image_id']) ? $params['default_profile_image_id'] : null;
-            $profile->birth_date = $birth_date;
-            $profile->description = $description;
-            $profile->email = $email;
-            $profile->gender_id = $gender_id;
-            $profile->gender_preference_id = $gender_preference_id;
-            $profile->default_profile_image_id = $default_profile_image_id;
-
-            if($profile->save()){
-                $transaction->commit();
-                $response->data = [
-                    'status' => true,
-                    'username' => $user->username,
-                    'id' => $user->id,
-                    'profile' => $profile->id,
-                    'message' => 'User created!'
-                  ];
-            };
+        if ($profile->save()){
+            $user->profile_id = $profile->id;
+            if($user->save()){
+              $transaction->commit();
+              $response->data = [
+                  'status' => true,
+                  'username' => $user->username,
+                  'id' => $user->id,
+                  'profile' => $profile->id,
+                  'message' => 'User created!'
+              ];
+            }
         } else{
           $transaction->rollBack();
           $response->data = [
