@@ -19,6 +19,7 @@ use Yii;
  * @property Gender $gender
  * @property Gender $genderPreference
  * @property ProfileImage[] $profileImages
+ * @property User $user
  */
 class Profile extends \yii\db\ActiveRecord
 {
@@ -100,5 +101,15 @@ class Profile extends \yii\db\ActiveRecord
     public function getProfileImages()
     {
         return $this->hasMany(ProfileImage::className(), ['profile_id' => 'id'])->inverseOf('profile');
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserProfile()
+    {
+        return $this->hasOne(User::className(), ['profile_id' => 'id'])->inverseOf('userProfile');
     }
 }
