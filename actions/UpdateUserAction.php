@@ -11,9 +11,9 @@ class UpdateUserAction extends UpdateAction {
 
     public function run($id) {
       $params = Yii::$app->getRequest()->getBodyParams();
-      $user = User::find()->where(['id' => $id])->one(); 
-      
-      $profile = Profile::find()->where(['id' => $user->profile_id])->one();
+      $user = User::find()->with('profile')->where(['id' => $id])->one();
+      $profile = $user->profile;
+
 
       $username = isset($params['username']) ? $params['username'] : $user->username;
       $role_id = isset($params['role_id']) ? $params['role_id'] : $user->role_id;
