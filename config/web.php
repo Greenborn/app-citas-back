@@ -50,7 +50,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
               [ 'class' => 'yii\rest\UrlRule',
-                'controller' => 'chat_room',
+                'controller' => 'chat-room',
               ],
               [ 'class' => 'yii\rest\UrlRule',
                 'controller' => 'gender',
