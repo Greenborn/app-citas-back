@@ -78,4 +78,11 @@ class ChatRoom extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Message::className(), ['chat_id' => 'id'])->inverseOf('chat');
     }
+
+    public function extraFields() {
+        return [ 'userReceiver',
+                 'userSender',
+                 'messages'
+               ];
+    }
 }
