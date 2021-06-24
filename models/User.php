@@ -174,7 +174,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
     public function extraFields() {
-        return [ 'userProfile'];
+        return [ 'profile'];
     }
 
 
