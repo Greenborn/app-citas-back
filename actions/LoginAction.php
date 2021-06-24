@@ -33,7 +33,7 @@ class LoginAction extends CreateAction {
     else
       $response->data = [
           'status' => $status,
-          'message' => 'Unauthorize Access!',
+          'message' => 'Acceso no autorizado!',
       ];
   }
 }
