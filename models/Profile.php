@@ -112,4 +112,13 @@ class Profile extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['profile_id' => 'id'])->inverseOf('userProfile');
     }
+
+    public function extraFields() {
+        return [
+                  'profileImages',
+                  'defaultProfileImage',
+                  'genderPreference',
+                  'gender'
+               ];
+    }
 }
