@@ -34,7 +34,7 @@ class Message extends \yii\db\ActiveRecord
             [['chat_id'], 'required'],
             [['chat_id', 'user_sender_id'], 'integer'],
             [['message'], 'string', 'max' => 500],
-            [['chat_id'], 'exist', 'skipOnError' => true, 'targetClass' => Chat-room::className(), 'targetAttribute' => ['chat_id' => 'id']],
+            [['chat_id'], 'exist', 'skipOnError' => true, 'targetClass' => ChatRoom::className(), 'targetAttribute' => ['chat_id' => 'id']],
             [['user_sender_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_sender_id' => 'id']],
         ];
     }
