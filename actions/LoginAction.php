@@ -28,7 +28,8 @@ class LoginAction extends CreateAction {
           'token'  => $user->access_token,
           'username' => $user->username,
           'role' => $user->role->type,
-          'id'   => $user->id
+          'id'   => $user->id,
+          'online' => $user->online
         ];
     else
       $response->data = [
