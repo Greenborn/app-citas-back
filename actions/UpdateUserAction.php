@@ -14,11 +14,12 @@ class UpdateUserAction extends UpdateAction {
       $user = User::find()->with('profile')->where(['id' => $id])->one();
       $profile = $user->profile;
 
-
       $username = isset($params['username']) ? $params['username'] : $user->username;
+      $online = isset($params['online']) ? $params['online'] : $user->online;
       $role_id = isset($params['role_id']) ? $params['role_id'] : $user->role_id;
       $state_id = isset($params['state_id']) ? $params['state_id'] : $user->state_id;
       $password = isset($params['password']) ? $params['password'] : null;
+
       $birth_date = isset($params['birth_date']) ? $params['birth_date'] : $profile->birth_date;
       $description = isset($params['description']) ? $params['description'] : $profile->description;
       $email = isset($params['email']) ? $params['email'] : $profile->email;
@@ -33,6 +34,8 @@ class UpdateUserAction extends UpdateAction {
             $user->username = $username;
             $user->role_id = $role_id;
             $user->state_id = $state_id;
+            $user->online   = $online;
+
             $profile->birth_date = $birth_date;
             $profile->description = $description;
             $profile->email = $email;
