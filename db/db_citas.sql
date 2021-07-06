@@ -91,9 +91,11 @@ CREATE TABLE `profile` (
   `email` varchar(255) DEFAULT NULL,
   `default_profile_image_id` int(11) DEFAULT NULL,
   `gender_id` int(11) DEFAULT NULL,
+  `lat` float(13) DEFAULT NULL,
+  `lng` float(13) DEFAULT NULL,
   `gender_preference_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+t
 --
 -- Volcado de datos para la tabla `profile`
 --
