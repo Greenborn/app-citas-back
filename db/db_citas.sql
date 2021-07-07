@@ -95,7 +95,7 @@ CREATE TABLE `profile` (
   `lng` float(13) DEFAULT NULL,
   `gender_preference_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-t
+
 --
 -- Volcado de datos para la tabla `profile`
 --
