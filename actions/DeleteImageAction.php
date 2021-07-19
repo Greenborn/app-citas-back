@@ -20,6 +20,7 @@ class DeleteImageAction extends DeleteAction {
 
           try {
             if (!unlink($profile_image->path)) {
+                $transaction->rollBack();
                 throw new \Exception('No se pudo eliminar el archivo', 1);
             } else {
                 $response->data = [
