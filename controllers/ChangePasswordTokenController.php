@@ -5,7 +5,7 @@ namespace app\controllers;
 use yii\rest\ActiveController;
 use yii\filters\Cors;
 
-class ChangePasswordTokenController extends BaseController {
+class ChangePasswordTokenController extends ActiveController {
 
     public $modelClass = 'app\models\User';
 
