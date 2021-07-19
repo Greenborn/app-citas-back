@@ -55,7 +55,7 @@ class UpdateUserAction extends UpdateAction {
                 'profile' => $profile->id,
               ];
             } else{
-              $transaction->rollBack();
+              $transaction->rollBack();var_dump($user->getErrors());die();
               throw new \Exception($user->getErrors(), 1);
             }
           } else{
