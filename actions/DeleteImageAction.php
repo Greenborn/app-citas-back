@@ -23,6 +23,7 @@ class DeleteImageAction extends DeleteAction {
                 $transaction->rollBack();
                 throw new \Exception('No se pudo eliminar el archivo', 1);
             } else {
+                $transaction->commit();
                 $response->data = [
                   'success' => true,
                 ];
