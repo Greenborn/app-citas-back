@@ -1,7 +1,4 @@
 <?php
-<?php
-namespace app\actions;
-
 use Yii;
 use yii\rest\DeleteAction;
 use yii\helpers\Url;
