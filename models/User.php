@@ -202,7 +202,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
         ]);
     }
 
