@@ -36,7 +36,10 @@ class DeleteImageAction extends DeleteAction {
           }
 
         } else {
-          throw new \Exception( $profile_image->getErrors(), 1);
+          $response->data = [
+            'success' => false,
+            'message' => $profile_image->getErrors()
+          ];
         }
 
       }
