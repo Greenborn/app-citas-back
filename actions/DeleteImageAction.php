@@ -17,7 +17,7 @@ class DeleteImageAction extends DeleteAction {
         if ( $profile_image->delete() ){
 
           try {
-            unlink($profile_image->path);
+            $deleted_status = unlink($profile_image->path);
           } catch (\Exception $e) {
               $transaction->rollBack();
               $response->data = [
@@ -26,10 +26,12 @@ class DeleteImageAction extends DeleteAction {
               ];
           }
 
-          $transaction->commit();
-          $response->data = [
-            'success' => true,
-          ];
+          if ($deleted_status){
+            $transaction->commit();
+            $response->data = [
+              'success' => true,
+            ];
+          }
 
         } else {
           $response->data = [
