@@ -1,4 +1,5 @@
 <?php
+<?php
 namespace app\actions;
 
 use Yii;
@@ -19,14 +20,7 @@ class DeleteImageAction extends DeleteAction {
         if ( $profile_image->delete() ){
 
           try {
-            if (!unlink($profile_image->path)) {
-                $transaction->rollBack();
-                throw new \Exception('No se pudo eliminar el archivo', 1);
-            } else {
-                $response->data = [
-                  'success' => true,
-                ];
-            }
+            unlink($profile_image->path);
           } catch (\Exception $e) {
               $transaction->rollBack();
               $response->data = [
@@ -35,8 +29,16 @@ class DeleteImageAction extends DeleteAction {
               ];
           }
 
+          $transaction->commit();
+          $response->data = [
+            'success' => true,
+          ];
+
         } else {
-          throw new \Exception( $profile_image->getErrors(), 1);
+          $response->data = [
+            'success' => false,
+            'message' => $profile_image->getErrors()
+          ];
         }
 
       }
