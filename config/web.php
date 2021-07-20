@@ -31,8 +31,15 @@ $config = [
             'errorAction' => 'site/error',
         ],
         'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'useFileTransport' => true,
+          'class' => 'yii\swiftmailer\Mailer',
+          'transport' => [
+              'class' => 'Swift_SmtpTransport',
+              'host' => 'mail-v2.coodesoft.com.ar',  // ej. smtp.mandrillapp.com o smtp.gmail.com
+              'username' => 'postmaster@coodesoft.com.ar',
+              'password' => '**c00des0ft**',
+              'port' => '587', // El puerto 25 es un puerto común también
+              'encryption' => 'tls', // Es usado también a menudo, revise la configuración del servidor
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -80,6 +87,14 @@ $config = [
               ],
               [ 'class' => 'yii\rest\UrlRule',
                 'controller' => 'user',
+              ],
+              [ 'class' => 'yii\rest\UrlRule',
+                'controller' => 'change-password-token',
+                'pluralize' => false,
+              ],
+              [ 'class' => 'yii\rest\UrlRule',
+                'controller' => 'password-reset',
+                'pluralize' => false,
               ],
             ],
         ],
