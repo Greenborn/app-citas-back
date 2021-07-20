@@ -11,6 +11,7 @@ class DeleteImageAction extends DeleteAction {
       $response->format = \yii\web\Response::FORMAT_JSON;
 
       $profile_image = ProfileImage::find()->where(['id' => $id])->one();
+      $errors        = 'Error no definido';
 
       if ($profile_image !== null){
         $transaction = ProfileImage::getDb()->beginTransaction();
@@ -19,11 +20,7 @@ class DeleteImageAction extends DeleteAction {
           try {
             $deleted_status = unlink($profile_image->path);
           } catch (\Exception $e) {
-              $transaction->rollBack();
-              $response->data = [
-                'success' => false,
-                'message' => $e->getMessage()
-              ];
+            $errors = $e;
           }
 
           if ($deleted_status){
@@ -31,12 +28,19 @@ class DeleteImageAction extends DeleteAction {
             $response->data = [
               'success' => true,
             ];
+          } else {
+            $transaction->rollBack();
+            $response->data = [
+              'success' => false,
+              'message' => $errors
+            ];
           }
 
         } else {
+          $errors = $profile_image->getErrors();
           $response->data = [
             'success' => false,
-            'message' => $profile_image->getErrors()
+            'message' => $errors
           ];
         }
 
