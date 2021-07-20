@@ -23,20 +23,20 @@ class PasswordResetAction extends CreateAction{
           $status = $user;
         }
 
-        if (!$user) {
-          $response->data = [
-            'status' => $status,
-            'message' => 'Acceso no autorizado!',
-          ];
-        }
-
-        if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
+        if ($user) {
+          if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
             $user->generatePasswordResetToken();
             if (!$user->save())
                 $response->data = [
-                  'status' => $status,
+                  'status' => false,
                   'message' => 'Acceso no autorizado!',
                 ];
+        }
+        }else{
+          $response->data = [
+            'status' => false,
+            'message' => 'Acceso no autorizado!',
+          ];
         }
 
   
@@ -52,13 +52,14 @@ class PasswordResetAction extends CreateAction{
               ->setSubject('Recuperacion de contraseña para ' . Yii::$app->name)
               ->send();
           $response->data = [
-            'status' => $status,
+            'status' => true,
+            'send' => $message,
             'message' => 'Email enviado!',
            ];
         }
       else
         $response->data = [
-            'status' => $status,
+            'status' => false,
             'message' => 'Acceso no autorizado!',
         ];
     }
