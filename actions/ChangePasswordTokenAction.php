@@ -43,7 +43,6 @@ class ChangePasswordTokenAction extends UpdateAction {
               ];                   
           }
         }else{
-          $transaction->rollBack();
           $response->data = [
               'status' => false,
               'message' => 'Error no se pudo cambiar la contraseña!',
