@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string $path
+ * @property string $url
  * @property int|null $profile_id
  *
  * @property Profile[] $profiles
@@ -30,9 +31,9 @@ class ProfileImage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['path'], 'required'],
+            [['path', 'url'], 'required'],
             [['profile_id'], 'integer'],
-            [['path'], 'string', 'max' => 400],
+            [['path', 'url'], 'string', 'max' => 400],
             [['profile_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::className(), 'targetAttribute' => ['profile_id' => 'id']],
         ];
     }
@@ -45,6 +46,7 @@ class ProfileImage extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'path' => 'Path',
+            'url'  => 'Url',
             'profile_id' => 'Profile ID',
         ];
     }
