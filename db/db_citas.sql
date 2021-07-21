@@ -112,6 +112,7 @@ INSERT INTO `profile` (`id`, `birth_date`, `description`, `email`, `default_prof
 CREATE TABLE `profile_image` (
   `id` int(11) NOT NULL,
   `path` varchar(400) NOT NULL,
+  `url` varchar(400) NOT NULL,
   `profile_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
