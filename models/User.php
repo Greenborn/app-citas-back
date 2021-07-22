@@ -17,6 +17,7 @@ use Yii;
  * @property string|null $updated_at
  * @property int $role_id
  * @property int $profile_id
+ * @property boolean $verification_email
  *
  * @property Chat-room[] $chat-rooms
  * @property Chat-room[] $chat-rooms0
@@ -79,6 +80,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'online' => 'Online',
             'role_id' => 'Role ID',
             'profile_id' => 'Profile ID',
+            'verification_email' => 'Verification Email',
         ];
     }
 

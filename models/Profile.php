@@ -14,6 +14,8 @@ use Yii;
  * @property int|null $gender_id
  * @property int $gender_preference_id
  * @property int|null $default_profile_image_id
+ * @property float|null $lat
+ * @property float|null $lng
  *
  * @property ProfileImage $defaultProfileImage
  * @property Gender $gender
@@ -60,6 +62,8 @@ class Profile extends \yii\db\ActiveRecord
             'gender_id' => 'Gender ID',
             'gender_preference_id' => 'Gender Preference ID',
             'default_profile_image_id' => 'Default Profile Image ID',
+            'lat' => 'Latitud',
+            'lng' => 'Longitud',
         ];
     }
 
