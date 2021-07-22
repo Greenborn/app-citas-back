@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 22-07-2021 a las 22:18:02
+-- Tiempo de generación: 22-07-2021 a las 22:31:19
 -- Versión del servidor: 10.4.19-MariaDB
 -- Versión de PHP: 7.4.19
 
@@ -112,6 +112,7 @@ INSERT INTO `profile` (`id`, `birth_date`, `description`, `email`, `default_prof
 CREATE TABLE `profile_image` (
   `id` int(11) NOT NULL,
   `path` varchar(400) NOT NULL,
+  `url` varchar(400) NOT NULL,
   `profile_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
