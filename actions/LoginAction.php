@@ -29,6 +29,8 @@ class LoginAction extends CreateAction {
           'username' => $user->username,
           'role' => $user->role->type,
           'id'   => $user->id,
+          'profile_id'   => $user->profile_id,
+          'verification_email' => $user->verification_email,
           'online' => $user->online
         ];
     else
