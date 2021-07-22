@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 21-06-2021 a las 23:03:18
+-- Tiempo de generación: 22-07-2021 a las 22:18:02
 -- Versión del servidor: 10.4.19-MariaDB
 -- Versión de PHP: 7.4.19
 
@@ -91,8 +91,8 @@ CREATE TABLE `profile` (
   `email` varchar(255) DEFAULT NULL,
   `default_profile_image_id` int(11) DEFAULT NULL,
   `gender_id` int(11) DEFAULT NULL,
-  `lat` float(13) DEFAULT NULL,
-  `lng` float(13) DEFAULT NULL,
+  `lat` float DEFAULT NULL,
+  `lng` float DEFAULT NULL,
   `gender_preference_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -100,8 +100,8 @@ CREATE TABLE `profile` (
 -- Volcado de datos para la tabla `profile`
 --
 
-INSERT INTO `profile` (`id`, `birth_date`, `description`, `email`, `default_profile_image_id`, `gender_id`, `gender_preference_id`) VALUES
-(1, NULL, NULL, NULL, NULL, NULL, 1);
+INSERT INTO `profile` (`id`, `birth_date`, `description`, `email`, `default_profile_image_id`, `gender_id`, `lat`, `lng`, `gender_preference_id`) VALUES
+(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -112,7 +112,6 @@ INSERT INTO `profile` (`id`, `birth_date`, `description`, `email`, `default_prof
 CREATE TABLE `profile_image` (
   `id` int(11) NOT NULL,
   `path` varchar(400) NOT NULL,
-  `url` varchar(400) NOT NULL,
   `profile_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -152,15 +151,16 @@ CREATE TABLE `user` (
   `updated_at` varchar(45) DEFAULT NULL,
   `role_id` int(11) NOT NULL,
   `online` tinyint(1) DEFAULT NULL,
-  `profile_id` int(11) NOT NULL
+  `profile_id` int(11) NOT NULL,
+  `verification_email` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `password_hash`, `password_reset_token`, `access_token`, `state_id`, `created_at`, `updated_at`, `role_id`, `online`, `profile_id`) VALUES
-(1, 'admin', '$2y$13$HeoJ/HeyhNLYBY0z6SWNzOovbzHE5krKJ8K7AWNc.KjB/Bjcf6BPG', NULL, '$2y$13$Tr6i.CEbjh7LoQDbFmBYGOLolsriXJfCeYSSQ9gc9QkRFsr842hc6', 1, NULL, NULL, 1, 0, 1);
+INSERT INTO `user` (`id`, `username`, `password_hash`, `password_reset_token`, `access_token`, `state_id`, `created_at`, `updated_at`, `role_id`, `online`, `profile_id`, `verification_email`) VALUES
+(1, 'admin', '$2y$13$HeoJ/HeyhNLYBY0z6SWNzOovbzHE5krKJ8K7AWNc.KjB/Bjcf6BPG', NULL, '$2y$13$Tr6i.CEbjh7LoQDbFmBYGOLolsriXJfCeYSSQ9gc9QkRFsr842hc6', 1, NULL, NULL, 1, 0, 1, 1);
 
 --
 -- Índices para tablas volcadas
