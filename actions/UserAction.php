@@ -82,14 +82,14 @@ class UserAction extends CreateAction {
               $transaction->rollBack();
               $response->data = [
                 'status' => false,
-                'message' => 'Usuario no creado! Hay un error! u'
+                'message' => 'Usuario no creado! Hay un error!'
               ];
             }
         } else{
           $transaction->rollBack();
           $response->data = [
             'status' => false,
-            'message' => 'Usuario no creado! Hay un error! p',
+            'message' => 'Usuario no creado! Hay un error!',
             'Error' => $user->getErrors()
           ];
         }
