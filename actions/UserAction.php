@@ -34,6 +34,7 @@ class UserAction extends CreateAction {
         $user->id = 0;
         $user->state_id = 1;
         $user->role_id = $role_id;
+        $user->verification_email = 0;
 
         $profile = new Profile();
         $profile->id= 0;
@@ -49,6 +50,8 @@ class UserAction extends CreateAction {
         $profile->gender_id = $gender_id;
         $profile->gender_preference_id = $gender_preference_id;
         $profile->default_profile_image_id = $default_profile_image_id;
+        $profile->lat = null;
+        $profile->lng = null;
 
         $user->profile_id = $profile->id;
 
@@ -58,6 +61,16 @@ class UserAction extends CreateAction {
             $user->profile_id = $profile->id;
             if($user->save()){
               $transaction->commit();
+              $message = Yii::$app
+              ->mailer
+              ->compose(
+                  ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
+                  ['user' => $user]
+                )
+              ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+              ->setTo($email)
+              ->setSubject('Verificacion de email para ' . Yii::$app->name)
+              ->send();
               $response->data = [
                   'status' => true,
                   'username' => $user->username,
@@ -76,7 +89,8 @@ class UserAction extends CreateAction {
           $transaction->rollBack();
           $response->data = [
             'status' => false,
-            'message' => 'Usuario no creado! Hay un error!'
+            'message' => 'Usuario no creado! Hay un error!',
+            'Error' => $user->getErrors()
           ];
         }
 
