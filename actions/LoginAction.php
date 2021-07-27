@@ -28,7 +28,6 @@ class LoginAction extends CreateAction {
           'token'  => $user->access_token,
           'username' => $user->username,
           'role' => $user->role->type,
-          'role_id' => $user->role->id,
           'id'   => $user->id,
           'profile_id'   => $user->profile_id,
           'verification_email' => $user->verification_email,
