@@ -62,7 +62,7 @@ class SearchProfilesAction extends CreateAction {
 
       if ($response->data['status']){
         $connection = Yii::$app->db;
-        $command	  =	$connection->createCommand('Select *,
+        $command	  =	$connection->createCommand('Select profile.*, user.id as user_id,
           (
               2 * ASIN(
                 SQRT(
