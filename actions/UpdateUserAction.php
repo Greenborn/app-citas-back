@@ -43,8 +43,9 @@ class UpdateUserAction extends UpdateAction {
             $profile->gender_preference_id = $gender_preference_id;
             $profile->default_profile_image_id = $default_profile_image_id;
 
-            if ($password != $user->password_hash)
+            if ($password != null){
               $user->password_hash = Yii::$app->getSecurity()->generatePasswordHash($password);
+            }
 
             $transaction = User::getDb()->beginTransaction();
 
