@@ -12,7 +12,20 @@ class m211217_073155_create_table_user extends Migration
      */
     public function safeUp()
     {
-
+        $this->createTable('user', [
+            'id'                   => $this->primaryKey(),
+            'username'             => $this->string()->notNull(),
+            'password_hash'        => $this->string()->notNull(),
+            'password_reset_token' => $this->string()->notNull(),
+            'access_token'         => $this->string()->notNull(),
+            'state_id'             => $this->integer()->notNull(),
+            'online'               => $this->integer()->notNull(),
+            'created_at'           => $this->string(),
+            'updated_at'           => $this->string(),
+            'role_id'              => $this->integer()->notNull(),
+            'profile_id'           => $this->integer()->notNull(),
+            'verification_email'   => $this->string()->notNull(),
+        ]);
     }
 
     /**
@@ -24,19 +37,4 @@ class m211217_073155_create_table_user extends Migration
 
         return false;
     }
-
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m211217_073155_create_table_user cannot be reverted.\n";
-
-        return false;
-    }
-    */
 }
